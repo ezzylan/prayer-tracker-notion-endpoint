@@ -1,0 +1,22 @@
+name: Notion Cron
+
+on:
+    schedule:
+        - cron: "0 16 * * *" # Midnight Malaysia time (UTC+8 → 16:00 UTC)
+    workflow_dispatch:
+
+jobs:
+    run-cron:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: oven-sh/setup-bun@v2
+
+            - name: Install dependencies
+              run: bun install
+
+            - name: Run script
+              run: bun run index.ts
+              env:
+                  NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+                  NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
