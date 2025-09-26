@@ -9,12 +9,12 @@ const prayers = [
 ];
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
-const databaseId = process.env.NOTION_DATABASE_ID!;
+const dataSourceId = process.env.NOTION_DATA_SOURCE_ID!;
 
 async function addPrayers() {
 	for (const prayer of prayers) {
 		await notion.pages.create({
-			parent: { database_id: databaseId },
+			parent: { data_source_id: dataSourceId },
 			icon: {
 				type: "emoji",
 				// @ts-expect-error
@@ -39,11 +39,30 @@ async function addPrayers() {
 	console.log("✅ All prayers added to Prayer Tracker!");
 }
 
+async function deleteCompletedPrayers() {
+	const completedPrayers = await notion.dataSources.query({
+		data_source_id: dataSourceId,
+		filter: {
+			property: "Is Finished",
+			checkbox: {
+				equals: true,
+			},
+		},
+	});
+
+	completedPrayers.results.forEach(async (page) => {
+		await notion.pages.update({ page_id: page.id, archived: true });
+	});
+
+	console.log("✅ All completed prayers deleted from Prayer Tracker!");
+}
+
 (async () => {
 	try {
 		await addPrayers();
+		await deleteCompletedPrayers();
 	} catch (err) {
-		console.error("❌ Error adding prayers:", err);
+		console.error("❌ Error occurred:", err);
 		process.exit(1); // fail fast so GitHub Actions marks workflow as failed
 	}
 })();
