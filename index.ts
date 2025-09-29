@@ -1,4 +1,5 @@
 import { Client } from "@notionhq/client";
+import { startOfWeek } from "date-fns";
 
 const prayers = [
 	{ name: "Fajr", emoji: "🌅" },
@@ -10,6 +11,8 @@ const prayers = [
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 const dataSourceId = process.env.NOTION_DATA_SOURCE_ID!;
+
+const today = new Date();
 
 async function addPrayers() {
 	for (const prayer of prayers) {
@@ -25,7 +28,7 @@ async function addPrayers() {
 					title: [{ text: { content: prayer.name } }],
 				},
 				Date: {
-					date: { start: new Date().toISOString() },
+					date: { start: today.toISOString() },
 				},
 				"Is Finished": {
 					checkbox: false,
@@ -43,10 +46,16 @@ async function deleteCompletedPrayers() {
 	const completedPrayers = await notion.dataSources.query({
 		data_source_id: dataSourceId,
 		filter: {
-			property: "Is Finished",
-			checkbox: {
-				equals: true,
-			},
+			and: [
+				{
+					property: "Date",
+					date: { before: startOfWeek(today).toISOString() },
+				},
+				{
+					property: "Is Finished",
+					checkbox: { equals: true },
+				},
+			],
 		},
 	});
 
