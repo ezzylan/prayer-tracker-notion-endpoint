@@ -49,9 +49,7 @@ async function updatePrayerStatus() {
 					},
 				},
 			});
-		}
-
-		if (nowInSeconds >= currentPrayerTime) {
+		} else if (nowInSeconds >= currentPrayerTime) {
 			await notion.pages.update({
 				page_id: prayer.id,
 				properties: {
