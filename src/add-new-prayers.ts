@@ -1,5 +1,5 @@
-import { Client } from "@notionhq/client";
 import { startOfWeek } from "date-fns";
+import { dataSourceId, notion } from "./utils/notion";
 
 const prayers = [
 	{ name: "Fajr", emoji: "🌅" },
@@ -9,9 +9,6 @@ const prayers = [
 	{ name: "Isha", emoji: "🌙" },
 ];
 
-const notion = new Client({ auth: process.env.NOTION_TOKEN });
-const dataSourceId = process.env.NOTION_DATA_SOURCE_ID!;
-
 const today = new Date();
 
 async function addPrayers() {
@@ -20,7 +17,6 @@ async function addPrayers() {
 			parent: { data_source_id: dataSourceId },
 			icon: {
 				type: "emoji",
-				// @ts-expect-error
 				emoji: prayer.emoji,
 			},
 			properties: {
@@ -29,9 +25,6 @@ async function addPrayers() {
 				},
 				Date: {
 					date: { start: today.toISOString() },
-				},
-				"Is Finished": {
-					checkbox: false,
 				},
 			},
 		});
