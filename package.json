@@ -1,16 +1,17 @@
 {
-  "name": "prayer-tracker-notion-endpoint",
-  "module": "index.ts",
-  "type": "module",
-  "private": true,
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5.9.2"
-  },
-  "dependencies": {
-    "@notionhq/client": "^5.4.0",
-    "date-fns": "^4.1.0"
-  }
+	"name": "prayer-tracker-notion-endpoint",
+	"module": "index.ts",
+	"type": "module",
+	"private": true,
+	"devDependencies": {
+		"@types/bun": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "^5.9.2"
+	},
+	"dependencies": {
+		"@notionhq/client": "^5.22.0",
+		"date-fns": "^4.4.0",
+		"ofetch": "^1.5.1"
+	}
 }
