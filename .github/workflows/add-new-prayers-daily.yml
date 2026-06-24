@@ -2,8 +2,7 @@ name: Add New Prayers Daily
 
 on:
     schedule:
-        # - cron: "0 16 * * *" # Midnight Malaysia time (UTC+8 → 16:00 UTC)
-        - cron: "0 23 * * *" # Midnight Germany time (UTC+1 → 23:00 UTC)
+        - cron: "0 21 * * *" # 5 am Malaysia time (UTC+8 → 21:00 UTC)
     workflow_dispatch:
 
 jobs:
